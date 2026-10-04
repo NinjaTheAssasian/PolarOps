@@ -1,0 +1,21 @@
+# Polar Ops Portal
+
+One screen for Maitri and Bharati: live status, alerts, cause-and-effect impact, fuel forecast and what-if scenarios.
+
+Simulator feed · 1 tick = 4 hours of station time
+
+## Active alerts
+
+Rule engine: warning and critical thresholds across both stations.
+
+## What-if scenario
+
+Applies live to the simulation so you can watch alerts and fuel change.
+
+Station Extra temperature drop: **0** °C
+
+[ ] Main generator fails (backup heaters on)
+
+## Maitri vs Bharati
+
+Prototype for SIH26060 (team LEXA). All readings are simulated; thresholds and the fuel-burn formula are illustrative and need validation with NCPOR domain experts. The data source is replaceable with real API feeds, and ML forecasting is planned for a later phase once history exists.

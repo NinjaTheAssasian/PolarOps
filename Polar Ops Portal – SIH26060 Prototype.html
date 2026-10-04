@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Polar Ops Portal – Maitri & Bharati (SIH26060 prototype)</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9f0f5;--panel:#fff;--ink:#0f2438;--mut:#5b7185;--line:#d3dee7;--accent:#0b5c8a;--ok:#1c7c54;--warn:#b86e00;--crit:#c0262d;--okbg:#e3f4ec;--warnbg:#fdf0d8;--critbg:#fbe3e4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1620;--panel:#122332;--ink:#e6eff6;--mut:#8fa6b8;--line:#223a4d;--accent:#5bb6e8;--ok:#4cc58d;--warn:#f0a93b;--crit:#ff6b70;--okbg:#10382b;--warnbg:#3b2d10;--critbg:#431a1d}}
+:root[data-theme="dark"]{--bg:#0b1620;--panel:#122332;--ink:#e6eff6;--mut:#8fa6b8;--line:#223a4d;--accent:#5bb6e8;--ok:#4cc58d;--warn:#f0a93b;--crit:#ff6b70;--okbg:#10382b;--warnbg:#3b2d10;--critbg:#431a1d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 'Instrument Sans',system-ui,sans-serif}
+header{padding:20px 16px 8px;max-width:1180px;margin:0 auto}
+h1{font:600 clamp(24px,5vw,34px)/1.15 'Fraunces',Georgia,serif;margin:0 0 4px}
+.sub{color:var(--mut);margin:0;max-width:62ch}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px;font-size:13px;color:var(--mut)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:6px;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+main{max-width:1180px;margin:0 auto;padding:8px 16px 40px;display:grid;gap:16px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.card h2{font-size:18px;margin:0;font-weight:700}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:12px}
+.loc{color:var(--mut);font-size:13px}
+.badge{padding:3px 10px;border-radius:99px;font-weight:600;font-size:13px;white-space:nowrap}
+.b0{background:var(--okbg);color:var(--ok)}.b1{background:var(--warnbg);color:var(--warn)}.b2{background:var(--critbg);color:var(--crit)}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.k{border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.k span{display:block;color:var(--mut);font-size:12px}
+.k b{font-size:20px;font-weight:600}
+.k small{font-size:12px;color:var(--mut);font-weight:400}
+.k.s1{border-color:var(--warn)}.k.s2{border-color:var(--crit)}
+.ch{margin-top:14px}.ch p{margin:0 0 2px;font-size:13px;color:var(--mut)}
+svg.sp{width:100%;height:64px;display:block}
+.inv{margin-top:14px;display:grid;gap:6px}
+.ir{display:grid;grid-template-columns:70px 1fr 56px;align-items:center;gap:8px;font-size:13px}
+.tr{height:8px;background:var(--line);border-radius:4px;overflow:hidden}.tr i{display:block;height:100%}
+.chain{margin-top:14px;font-size:13.5px;background:var(--bg);border-radius:8px;padding:10px 12px}
+.chain b{font-weight:600}
+.al{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.al li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;border-left:4px solid}
+.al .a1{background:var(--warnbg);border-color:var(--warn)}.al .a2{background:var(--critbg);border-color:var(--crit)}
+.al em{font-style:normal;font-weight:600;font-size:12px;min-width:66px}
+.none{color:var(--ok);margin:0}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+select,input[type=range],button{font:inherit;width:100%}
+select{padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+input[type=range]{accent-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:center}.row input{width:auto}
+button{padding:9px 12px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
+button.g{background:transparent;color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.cmp{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.cmp td,.cmp th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+.cmp th{color:var(--mut);font-weight:500}
+.res{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.note{font-size:12.5px;color:var(--mut)}
+</style>
+</head>
+<body>
+<header>
+<h1>Polar Ops Portal</h1>
+<p class="sub">One screen for Maitri and Bharati: live status, alerts, cause-and-effect impact, fuel forecast and what-if scenarios.</p>
+<div class="bar"><span><i class="dot"></i>Simulator feed · 1 tick = 4 hours of station time</span><span id="clock"></span><span style="flex:1"></span><button class="g" style="width:auto" id="reset">Reset simulation</button></div>
+</header>
+<main>
+<div class="grid" id="stations"></div>
+<div class="grid">
+ <section class="card"><h2>Active alerts</h2><p class="note" style="margin:2px 0 10px">Rule engine: warning and critical thresholds across both stations.</p><ul class="al" id="alerts"></ul></section>
+ <section class="card"><h2>What-if scenario</h2><p class="note" style="margin:2px 0 0">Applies live to the simulation so you can watch alerts and fuel change.</p>
+  <label for="sst">Station</label><select id="sst"><option value="maitri">Maitri</option><option value="bharati">Bharati</option></select>
+  <label for="sdrop">Extra temperature drop: <b id="dv">0</b> °C</label><input type="range" id="sdrop" min="0" max="25" value="0">
+  <div class="row" style="margin-top:12px"><input type="checkbox" id="sgen"><label for="sgen" style="margin:0;color:var(--ink)">Main generator fails (backup heaters on)</label></div>
+  <div class="res" id="res"></div></section>
+ <section class="card"><h2>Maitri vs Bharati</h2><table class="cmp" id="cmp"></table></section>
+</div>
+<p class="note">Prototype for SIH26060 (team LEXA). All readings are simulated; thresholds and the fuel-burn formula are illustrative and need validation with NCPOR domain experts. The data source is replaceable with real API feeds, and ML forecasting is planned for a later phase once history exists.</p>
+</main>
+<script>
+const rnd=(a,b)=>a+Math.random()*(b-a),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const mk=(name,loc,base,fuel,eq,inv)=>({name,loc,base,temp:base,wind:25,fuel,load:60,gen:true,eq,inv,th:[],fh:[]});
+let S,sc,tick;
+function init(){S={maitri:mk('Maitri','Schirmacher Oasis',-12,1000,[46,48],{Food:92,Water:58,Medicine:150,Spares:80}),
+ bharati:mk('Bharati','Larsemann Hills',-14,900,[41,44],{Food:75,Water:35,Medicine:120,Spares:40})};
+ sc={st:'maitri',drop:0,gen:false};tick=0;
+ document.getElementById('sdrop').value=0;document.getElementById('sgen').checked=false;document.getElementById('dv').textContent=0}
+// impact maths: colder -> more heating -> more fuel
+function est(temp,gen){const cons=(40+1.2*Math.max(0,-temp))*(gen?1:1.25);const load=cl(48+Math.max(0,-temp)+(gen?0:15),0,100);return{cons,load}}
+function calc(k){const s=S[k],e=est(s.temp,s.gen),w=s.eq[0]-(s.gen?0:1);const days=s.fuel/e.cons;const A=[];
+ const add=(sev,t,m)=>A.push({sev,k:s.name,t,m});
+ if(s.temp<=-30)add(2,'Temperature','Critical cold at '+s.temp.toFixed(1)+' °C');else if(s.temp<=-20)add(1,'Temperature','Cold stress at '+s.temp.toFixed(1)+' °C');
+ if(days<7)add(2,'Fuel','Only '+days.toFixed(1)+' days of fuel left');else if(days<15)add(1,'Fuel',days.toFixed(1)+' days of fuel left, plan resupply');
+ if(!s.gen)add(2,'Generator','Main generator offline, running on backup');
+ if(e.load>=95)add(2,'Power','Load at '+Math.round(e.load)+'%');else if(e.load>=80)add(1,'Power','Load high at '+Math.round(e.load)+'%');
+ const r=w/s.eq[1];if(r<.75)add(2,'Equipment',w+' of '+s.eq[1]+' units working');else if(r<.9)add(1,'Equipment',w+' of '+s.eq[1]+' units working');
+ const mi=Object.entries(s.inv).sort((a,b)=>a[1]-b[1])[0];if(mi[1]<20)add(2,'Inventory',mi[0]+' for '+mi[1]+' days');else if(mi[1]<40)add(1,'Inventory',mi[0]+' for '+mi[1]+' days');
+ const risk=A.some(a=>a.sev==2)?2:A.length?1:0;
+ return{s,e,w,days,A,risk}}
+function sp(arr,col,proj,max){const W=300,H=60,n=arr.length+(proj?84:0);if(arr.length<2)return '';const lo=Math.min(...arr),hi=Math.max(...arr),sp_=hi-lo||1;
+ const X=i=>i/(n-1)*W,Y=v=>H-4-(v-lo)/sp_*(H-8);let d=arr.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('');
+ let p='';if(proj){const last=arr[arr.length-1];const end=Math.max(lo-sp_*0.0,last-proj*84);p='<path d="M'+X(arr.length-1).toFixed(1)+' '+Y(last).toFixed(1)+'L'+W+' '+Y(Math.max(end,lo-sp_*.3)).toFixed(1)+'" stroke="'+col+'" stroke-dasharray="4 4" fill="none" stroke-width="2" opacity=".7"/>'}
+ return '<svg class="sp" viewBox="0 0 300 60" preserveAspectRatio="none" role="img"><path d="'+d+'" stroke="'+col+'" fill="none" stroke-width="2"/>'+p+'</svg>'}
+const BL=['Normal','Elevated','Critical'],cls=n=>'s'+n;
+function card(k){const c=calc(k),s=c.s,e=c.e;const base=est(s.base,true);const dp=Math.round((e.cons/base.cons-1)*100);
+ const kp=(l,v,u,sv)=>'<div class="k '+(sv?cls(sv):'')+'"><span>'+l+'</span><b>'+v+'</b> <small>'+u+'</small></div>';
+ const sev=t=>Math.max(0,...c.A.filter(a=>a.t==t).map(a=>a.sev));
+ const inv=Object.entries(s.inv).map(([n,d])=>{const col=d<20?'var(--crit)':d<40?'var(--warn)':'var(--ok)';return '<div class="ir"><span>'+n+'</span><div class="tr"><i style="width:'+cl(d/1.8,3,100)+'%;background:'+col+'"></i></div><span>'+d+' d</span></div>'}).join('');
+ const chain=s.temp<s.base-1||!s.gen?'<b>Impact chain:</b> temperature '+s.temp.toFixed(1)+' °C → heating demand up → fuel burn '+e.cons.toFixed(0)+' L/day ('+(dp>=0?'+':'')+dp+'% vs normal '+base.cons.toFixed(0)+') → fuel lasts '+c.days.toFixed(1)+' days instead of '+(s.fuel/base.cons).toFixed(1)+'.':'<b>Impact chain:</b> conditions near normal. Fuel burn '+e.cons.toFixed(0)+' L/day, about '+c.days.toFixed(1)+' days remaining.';
+ return '<section class="card"><div class="hd"><div><h2>'+s.name+'</h2><div class="loc">'+s.loc+'</div></div><span class="badge b'+c.risk+'">Risk: '+BL[c.risk]+'</span></div>'
+ +'<div class="kpis">'+kp('Temperature',s.temp.toFixed(1),'°C',sev('Temperature'))+kp('Wind',Math.round(s.wind),'km/h',0)
+ +kp('Power load',Math.round(e.load),'%',sev('Power'))+kp('Generator',s.gen?'Online':'Offline','',sev('Generator'))
+ +kp('Fuel',Math.round(s.fuel),'L',0)+kp('Days of fuel',c.days.toFixed(1),'d',sev('Fuel'))
+ +kp('Burn rate',e.cons.toFixed(0),'L/day',0)+kp('Equipment',c.w+'/'+s.eq[1],'working',sev('Equipment'))+'</div>'
+ +'<div class="ch"><p>Temperature trend</p>'+sp(s.th,'var(--accent)')+'</div>'
+ +'<div class="ch"><p>Fuel level and projection (dashed, at current burn rate)</p>'+sp(s.fh,'var(--warn)',e.cons/6)+'</div>'
+ +'<div class="inv">'+inv+'</div><div class="chain">'+chain+'</div></section>'}
+function render(){const ks=['maitri','bharati'],C=ks.map(calc);
+ stations.innerHTML=ks.map(card).join('');
+ const all=C.flatMap(c=>c.A).sort((a,b)=>b.sev-a.sev);
+ alerts.innerHTML=all.length?all.map(a=>'<li class="a'+a.sev+'"><em>'+(a.sev==2?'CRITICAL':'WARNING')+'</em><span><b>'+a.k+'</b>: '+a.m+'</span></li>').join(''):'<li class="none" style="list-style:none;padding:0;border:0">All systems within limits.</li>';
+ const r=(l,f)=>'<tr><th>'+l+'</th><td>'+f(C[0])+'</td><td>'+f(C[1])+'</td></tr>';
+ cmp.innerHTML='<tr><th></th><th>Maitri</th><th>Bharati</th></tr>'+r('Risk',c=>BL[c.risk])+r('Temp',c=>c.s.temp.toFixed(1)+' °C')+r('Fuel days',c=>c.days.toFixed(1))+r('Load',c=>Math.round(c.e.load)+'%')+r('Equipment',c=>c.w+'/'+c.s.eq[1])+r('Active alerts',c=>c.A.length);
+ const k=sc.st,s=S[k],b=est(s.base,true),w=est(s.base-sc.drop,!sc.gen);
+ res.innerHTML='<div class="k"><span>Fuel days, normal</span><b>'+(s.fuel/b.cons).toFixed(1)+'</b></div><div class="k '+(sc.drop||sc.gen?'s1':'')+'"><span>Fuel days, scenario</span><b>'+(s.fuel/w.cons).toFixed(1)+'</b></div><div class="k"><span>Burn rate</span><b>'+b.cons.toFixed(0)+'→'+w.cons.toFixed(0)+'</b> <small>L/day</small></div><div class="k"><span>Power load</span><b>'+Math.round(b.load)+'→'+Math.round(w.load)+'</b> <small>%</small></div>';
+ clock.textContent='Station time: day '+(1+Math.floor(tick/6))+', '+String((tick%6)*4).padStart(2,'0')+':00'}
+function step(){tick++;for(const k in S){const s=S[k],on=sc.st==k;
+ const tgt=s.base-(on?sc.drop:0)+3*Math.sin(tick/9);s.temp+=(tgt-s.temp)*.35+rnd(-.4,.4);s.wind=cl(s.wind+rnd(-4,4),5,70);
+ s.gen=!(on&&sc.gen);const e=est(s.temp,s.gen);s.load=e.load;s.fuel=Math.max(0,s.fuel-e.cons/6);
+ for(const i in s.inv)s.inv[i]=Math.max(0,s.inv[i]-(Math.random()<.02?1:0));
+ s.th.push(+s.temp.toFixed(1));s.fh.push(s.fuel);if(s.th.length>48){s.th.shift();s.fh.shift()}}render()}
+const $=id=>document.getElementById(id);
+sst.onchange=e=>{sc.st=e.target.value;render()};
+sdrop.oninput=e=>{sc.drop=+e.target.value;dv.textContent=sc.drop;render()};
+sgen.onchange=e=>{sc.gen=e.target.checked;render()};
+reset.onclick=()=>{init();for(let i=0;i<20;i++)step()};
+init();for(let i=0;i<20;i++)step();setInterval(step,1500);
+</script>
+</body>
+</html>
